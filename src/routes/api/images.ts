@@ -1,5 +1,7 @@
 import express from 'express';
 import sharp from 'sharp';
+import path from 'path';
+import fs from 'fs';
 
 const images = express.Router();
 const imageOptions = ['midjourney_1', 'midjourney_2', 'midjourney_3', 'midjourney_4'];
@@ -14,30 +16,42 @@ images.get('/:imageName', async (req, res) => {
     return res.status(400).send({ error: 'Image name not found' });
   }
 
-  const width = req.query.width;
-  const height = req.query.height;
+  const width = req.query.width?.toString();
+  const height = req.query.height?.toString();
 
-  let parsedWidth: number;
-  let parsedHeight: number;
+  const parsedWidth = parseMeasurement(width);
+  const parsedHeight = parseMeasurement(height);
 
-  if (!width || !height) {
-    parsedWidth = 250;
-    parsedHeight = 250;
-  } else {
-    parsedWidth = parseInt(width.toString()) || 250;
-    parsedHeight = parseInt(height.toString()) || 250;
-  }
-
-  const imagePath = `../../../assets/images/${imageName}.png`;
-  const destinationPath = `../../../assets/images_results/${imageName}_${parsedWidth}x${parsedHeight}.png`;
+  const imagePath = path.resolve(__dirname, `../../../assets/images/${imageName}.png`);
+  const destinationPath = path.resolve(__dirname, `../../../assets/images_results/${imageName}_${parsedWidth}x${parsedHeight}.png`);
 
   try {
+
+    if(fs.existsSync(destinationPath)) {
+      console.log('File exists, returning cached file');
+      return res.sendFile(destinationPath);
+    }
+
     await sharp(imagePath).resize(parsedWidth, parsedHeight).png().toFile(destinationPath);
   } catch (error) {
     return res.status(500).send({ error: `Sorry, but something went wrong. ${error}` });
   }
 
-  return res.send(`You have chosen ${req.params.imageName}`);
+  
+  return res.sendFile(destinationPath);
 });
+
+function parseMeasurement(measurement: string | undefined): number {
+  if(!measurement) {
+    return 250;
+  }
+
+  const parsedMeasurement = parseInt(measurement.toString());
+  if (isNaN(parsedMeasurement)) {
+    return 250;
+  }
+
+  return parsedMeasurement;
+}
 
 export default images;
