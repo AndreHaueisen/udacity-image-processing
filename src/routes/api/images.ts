@@ -23,14 +23,13 @@ images.get('/:imageName', async (req, res) => {
   const parsedHeight = parseMeasurement(height);
 
   const imagePath = path.resolve(__dirname, `../../../assets/images/${imageName}.png`);
-  const destinationPath = path.resolve(
-    __dirname,
-    `../../../assets/images_results/${imageName}_${parsedWidth}x${parsedHeight}.png`
-  );
+  const fileName = `${imageName}_${parsedWidth}x${parsedHeight}.png`;
+  const destinationPath = path.resolve(__dirname, `../../../assets/images_results/${fileName}`);
 
   try {
     if (fs.existsSync(destinationPath)) {
       console.log('File exists, returning cached file');
+      setContentDispositionHeader(res, fileName);
       return res.sendFile(destinationPath);
     }
 
@@ -39,6 +38,7 @@ images.get('/:imageName', async (req, res) => {
     return res.status(500).send({ error: `Sorry, but something went wrong. ${error}` });
   }
 
+  setContentDispositionHeader(res, fileName);
   return res.sendFile(destinationPath);
 });
 
@@ -53,6 +53,10 @@ function parseMeasurement(measurement: string | undefined): number {
   }
 
   return parsedMeasurement;
+}
+
+function setContentDispositionHeader(res: express.Response, fileName: string) {
+  res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
 }
 
 export { images, parseMeasurement };
