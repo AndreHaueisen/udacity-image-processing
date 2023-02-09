@@ -23,11 +23,13 @@ images.get('/:imageName', async (req, res) => {
   const parsedHeight = parseMeasurement(height);
 
   const imagePath = path.resolve(__dirname, `../../../assets/images/${imageName}.png`);
-  const destinationPath = path.resolve(__dirname, `../../../assets/images_results/${imageName}_${parsedWidth}x${parsedHeight}.png`);
+  const destinationPath = path.resolve(
+    __dirname,
+    `../../../assets/images_results/${imageName}_${parsedWidth}x${parsedHeight}.png`
+  );
 
   try {
-
-    if(fs.existsSync(destinationPath)) {
+    if (fs.existsSync(destinationPath)) {
       console.log('File exists, returning cached file');
       return res.sendFile(destinationPath);
     }
@@ -37,12 +39,11 @@ images.get('/:imageName', async (req, res) => {
     return res.status(500).send({ error: `Sorry, but something went wrong. ${error}` });
   }
 
-  
   return res.sendFile(destinationPath);
 });
 
 function parseMeasurement(measurement: string | undefined): number {
-  if(!measurement) {
+  if (!measurement) {
     return 250;
   }
 
@@ -54,4 +55,4 @@ function parseMeasurement(measurement: string | undefined): number {
   return parsedMeasurement;
 }
 
-export default images;
+export { images, parseMeasurement };

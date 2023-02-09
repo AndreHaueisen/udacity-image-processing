@@ -1,4 +1,4 @@
-import images from './api/images';
+import { images } from './api/images';
 import express from 'express';
 
 const routes = express.Router();

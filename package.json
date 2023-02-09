@@ -19,6 +19,7 @@
     "@types/logger": "^0.0.1",
     "@types/node": "^18.11.19",
     "@types/sharp": "^0.31.1",
+    "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.51.0",
     "eslint": "^8.33.0",
@@ -33,6 +34,7 @@
     "express": "^4.18.2",
     "jasmine": "^4.5.0",
     "jasmine-spec-reporter": "^7.0.0",
-    "sharp": "^0.31.3"
+    "sharp": "^0.31.3",
+    "supertest": "^6.3.3"
   }
 }
