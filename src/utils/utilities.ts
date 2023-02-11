@@ -1,19 +1,20 @@
 import express from 'express';
+import {MissingMeasurementError, InvalidMeasurementError} from '../erros/measurement_error';
 
 function parseMeasurement(measurement: string | undefined): number {
   if (!measurement) {
-    throw new Error('Measurement is undefined');
+    throw new MissingMeasurementError();
   }
 
   const parsedMeasurement = parseInt(measurement.toString());
   if (isNaN(parsedMeasurement)) {
-    throw new Error('Measurement is not a number');
+    throw new InvalidMeasurementError();
   }
 
   return parsedMeasurement;
 }
 
-function setContentDispositionHeader(res: express.Response, fileName: string) {
+function setContentDispositionHeader(res: express.Response, fileName: string): void {
   res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
 }
 
