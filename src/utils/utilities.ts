@@ -1,5 +1,5 @@
 import express from 'express';
-import {MissingMeasurementError, InvalidMeasurementError} from '../erros/measurement_error';
+import { MissingMeasurementError, InvalidMeasurementError } from '../erros/measurement_error';
 
 function parseMeasurement(measurement: string | undefined): number {
   if (!measurement) {

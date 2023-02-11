@@ -19,11 +19,10 @@ images.get('/:imageName', async (req, res): Promise<express.Response | void> => 
   try {
     image = new Image(req.query.height?.toString(), req.query.width?.toString(), req.params.imageName);
   } catch (error) {
-
     let errorMessage = '';
-    if(error instanceof MissingMeasurementError){
+    if (error instanceof MissingMeasurementError) {
       errorMessage = 'Either width or height are missing';
-    } else if (error instanceof InvalidMeasurementError){
+    } else if (error instanceof InvalidMeasurementError) {
       errorMessage = 'Either width or height are invalid';
     } else if (error instanceof Error) {
       errorMessage = error.message;

@@ -44,20 +44,34 @@ describe('/images/:imageName', () => {
     const res = await request(app).get('/images/midjourney_1?height=750');
 
     expect(res.statusCode).toEqual(400);
-    expect(res.body.error).toEqual('Measurement is undefined');
+    expect(res.body.error).toEqual('Either width or height are missing');
   });
 
   it('returns an error when a valid image name is used but there is no height', async () => {
     const res = await request(app).get('/images/midjourney_1?width=750');
 
     expect(res.statusCode).toEqual(400);
-    expect(res.body.error).toEqual('Measurement is undefined');
+    expect(res.body.error).toEqual('Either width or height are missing');
   });
 
   it('returns an error when a valid image name is used but there is no width or height', async () => {
     const res = await request(app).get('/images/midjourney_1');
 
     expect(res.statusCode).toEqual(400);
-    expect(res.body.error).toEqual('Measurement is undefined');
+    expect(res.body.error).toEqual('Either width or height are missing');
+  });
+
+  it('returns an error when a valid image name is used but width is invalid', async () => {
+    const res = await request(app).get('/images/midjourney_1?width=invalid&height=750');
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body.error).toEqual('Either width or height are invalid');
+  });
+
+  it('returns an error when a valid image name is used but height is invalid', async () => {
+    const res = await request(app).get('/images/midjourney_1?width=750&height=invalid');
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body.error).toEqual('Either width or height are invalid');
   });
 });
