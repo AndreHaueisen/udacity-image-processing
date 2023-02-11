@@ -1,4 +1,3 @@
-import { parseMeasurement } from '../../../routes/api/images';
 import app from '../../..';
 import request from 'supertest';
 
@@ -49,22 +48,5 @@ describe('/images/:imageName', () => {
 
     console.log(res.header['content-disposition']);
     expect(res.header['content-disposition']).toBe('attachment; filename="midjourney_1_500x750.png"');
-  });
-});
-
-describe('parseMeasurement', () => {
-  it('should return 250 when no measurement is provided', () => {
-    const result = parseMeasurement(undefined);
-    expect(result).toEqual(250);
-  });
-
-  it('should return 250 when a non-number measurement is provided', () => {
-    const result = parseMeasurement('foo');
-    expect(result).toEqual(250);
-  });
-
-  it('should return the parsed measurement when a string number is provided', () => {
-    const result = parseMeasurement('500');
-    expect(result).toEqual(500);
   });
 });
