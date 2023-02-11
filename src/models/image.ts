@@ -2,8 +2,8 @@ import { parseMeasurement } from '../utils/utilities';
 import path from 'path';
 
 export default class Image {
-  readonly height?: number;
-  readonly width?: number;
+  readonly height: number;
+  readonly width: number;
   readonly name: string;
 
   constructor(height: string | undefined, width: string | undefined, name: string) {

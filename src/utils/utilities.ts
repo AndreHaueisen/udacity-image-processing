@@ -2,12 +2,12 @@ import express from 'express';
 
 function parseMeasurement(measurement: string | undefined): number {
   if (!measurement) {
-    return 250;
+    throw new Error('Measurement is undefined');
   }
 
   const parsedMeasurement = parseInt(measurement.toString());
   if (isNaN(parsedMeasurement)) {
-    return 250;
+    throw new Error('Measurement is not a number');
   }
 
   return parsedMeasurement;
