@@ -1,10 +1,9 @@
 import express from 'express';
-import sharp from 'sharp';
 
 import fs from 'fs';
 import Image from '../../models/image';
 
-import { setContentDispositionHeader } from '../../utils/utilities';
+import { setContentDispositionHeader, resizeImage } from '../../utils/utilities';
 import { InvalidMeasurementError, MissingMeasurementError } from '../../erros/measurement_error';
 
 const images = express.Router();
@@ -48,7 +47,7 @@ images.get('/:imageName', async (req, res): Promise<express.Response | void> => 
       return res.sendFile(destinationPath);
     }
 
-    await sharp(imageSourcePath).resize(image.width, image.height).png().toFile(destinationPath);
+    await resizeImage(imageSourcePath, destinationPath, image.width, image.height);
   } catch (error) {
     return res.status(500).send({ error: `Sorry, but something went wrong. ${error}` });
   }

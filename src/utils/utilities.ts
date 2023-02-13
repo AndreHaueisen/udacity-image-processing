@@ -1,4 +1,5 @@
 import express from 'express';
+import sharp from 'sharp';
 import { MissingMeasurementError, InvalidMeasurementError } from '../erros/measurement_error';
 
 function parseMeasurement(measurement: string | undefined): number {
@@ -18,4 +19,13 @@ function setContentDispositionHeader(res: express.Response, fileName: string): v
   res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
 }
 
-export { parseMeasurement, setContentDispositionHeader };
+function resizeImage(
+  sourcePath: string,
+  destinationPath: string,
+  width: number,
+  height: number
+): Promise<sharp.OutputInfo> {
+  return sharp(sourcePath).resize(width, height).png().toFile(destinationPath);
+}
+
+export { parseMeasurement, setContentDispositionHeader, resizeImage };
